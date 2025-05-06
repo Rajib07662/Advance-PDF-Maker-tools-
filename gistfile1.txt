@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced PDF Tools</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      background: #f5f7fa;
+      margin: 0;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-bottom: 40px;
+    }
+    .tool-card {
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      width: 280px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .tool-card h2 {
+      margin-top: 0;
+      color: #3498db;
+      font-size: 1.25rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    input[type="file"], input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      margin: 12px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 15px;
+      font-weight: 500;
+      transition: background 0.3s;
+      margin-top: 8px;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .note {
+      font-size: 13px;
+      color: #7f8c8d;
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+    .advanced-options {
+      display: none;
+      margin-top: 15px;
+    }
+    .show-more {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .show-more-btn {
+      background: #95a5a6;
+      width: auto;
+      padding: 10px 25px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Advanced PDF Toolkit</h1>
+  
+  <div class="container">
+    <!-- Basic Tools -->
+    <div class="tool-card">
+      <h2>Compress PDF</h2>
+      <form action="/compress" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Reduce File Size</button>
+      </form>
+      <p class="note">Optimize PDFs for smaller size without quality loss.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>Merge PDFs</h2>
+      <form action="/merge" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_files" accept=".pdf" multiple required>
+        <button type="submit">Combine Files</button>
+      </form>
+      <p class="note">Join multiple PDFs into a single document.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>Split PDF</h2>
+      <form action="/split" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <input type="number" name="page_number" placeholder="Split after page..." min="1" required>
+        <button type="submit">Split Document</button>
+      </form>
+      <p class="note">Divide PDF into separate files at specified pages.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>Images to PDF</h2>
+      <form action="/img2pdf" method="post" enctype="multipart/form-data">
+        <input type="file" name="images" accept="image/*" multiple required>
+        <button type="submit">Create PDF</button>
+      </form>
+      <p class="note">Convert JPG, PNG to a PDF document.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>PDF to Images</h2>
+      <form action="/pdf2img" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <select name="format">
+          <option value="jpg">JPG</option>
+          <option value="png">PNG</option>
+        </select>
+        <button type="submit">Extract Images</button>
+      </form>
+      <p class="note">Convert each PDF page to image files.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>Rotate PDF</h2>
+      <form action="/rotate" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <select name="angle">
+          <option value="90">90° Clockwise</option>
+          <option value="180">180°</option>
+          <option value="270">90° Counter-clockwise</option>
+        </select>
+        <button type="submit">Rotate Pages</button>
+      </form>
+      <p class="note">Rotate entire document or selected pages.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>Password Protect</h2>
+      <form action="/protect" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <input type="text" name="password" placeholder="Set password" required>
+        <button type="submit">Encrypt PDF</button>
+      </form>
+      <p class="note">Add password security to your document.</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>Remove Password</h2>
+      <form action="/unlock" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <input type="text" name="password" placeholder="Current password" required>
+        <button type="submit">Unlock PDF</button>
+      </form>
+      <p class="note">Remove password protection from PDFs.</p>
+    </div>
+
+    <!-- Advanced Tools (Initially Hidden) -->
+    <div class="tool-card advanced-options">
+      <h2>Extract Text</h2>
+      <form action="/extract-text" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Get Text Content</button>
+      </form>
+      <p class="note">Extract all text from PDF to TXT file.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Watermark PDF</h2>
+      <form action="/watermark" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <input type="file" name="watermark" accept="image/*" required>
+        <button type="submit">Add Watermark</button>
+      </form>
+      <p class="note">Stamp image or text watermark on pages.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>PDF to Word</h2>
+      <form action="/pdf2word" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Convert to DOCX</button>
+      </form>
+      <p class="note">Convert PDF to editable Word document.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Word to PDF</h2>
+      <form action="/word2pdf" method="post" enctype="multipart/form-data">
+        <input type="file" name="word_file" accept=".doc,.docx" required>
+        <button type="submit">Convert to PDF</button>
+      </form>
+      <p class="note">Convert Word files to PDF format.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Excel to PDF</h2>
+      <form action="/excel2pdf" method="post" enctype="multipart/form-data">
+        <input type="file" name="excel_file" accept=".xls,.xlsx" required>
+        <button type="submit">Convert to PDF</button>
+      </form>
+      <p class="note">Convert Excel sheets to PDF documents.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Repair PDF</h2>
+      <form action="/repair" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Fix Corrupted File</button>
+      </form>
+      <p class="note">Recover damaged or corrupted PDF files.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>OCR PDF</h2>
+      <form action="/ocr" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <select name="language">
+          <option value="eng">English</option>
+          <option value="hin">Hindi</option>
+          <option value="fra">French</option>
+        </select>
+        <button type="submit">Recognize Text</button>
+      </form>
+      <p class="note">Convert scanned PDFs to searchable text.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Annotate PDF</h2>
+      <form action="/annotate" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <input type="text" name="text" placeholder="Annotation text">
+        <button type="submit">Add Comments</button>
+      </form>
+      <p class="note">Add notes/highlights to PDF documents.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Page Numbers</h2>
+      <form action="/pagenumbers" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <select name="position">
+          <option value="bottom-right">Bottom Right</option>
+          <option value="top-center">Top Center</option>
+        </select>
+        <button type="submit">Add Page Numbers</button>
+      </form>
+      <p class="note">Insert automatic page numbering.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Delete Pages</h2>
+      <form action="/delete-pages" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <input type="text" name="pages" placeholder="e.g., 1,3-5" required>
+        <button type="submit">Remove Pages</button>
+      </form>
+      <p class="note">Delete specific pages from document.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Resize PDF</h2>
+      <form action="/resize" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <select name="size">
+          <option value="a4">A4 (210×297mm)</option>
+          <option value="letter">Letter (216×279mm)</option>
+        </select>
+        <button type="submit">Change Page Size</button>
+      </form>
+      <p class="note">Adjust PDF page dimensions.</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>Black & White</h2>
+      <form action="/bw" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Convert to Grayscale</button>
+      </form>
+      <p class="note">Make PDF monochrome (black/white).</p>
+    </div>
+
+    <div class="tool-card advanced-options">
+      <h2>PDF Metadata</h2>
+      <form action="/metadata" method="post" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit">Edit Document Info</button>
+      </form>
+      <p class="note">Modify title, author, keywords etc.</p>
+    </div>
+  </div>
+
+  <div class="show-more">
+    <button class="show-more-btn" onclick="toggleAdvanced()">Show More Tools ▼</button>
+  </div>
+
+  <script>
+    function toggleAdvanced() {
+      const options = document.querySelectorAll('.advanced-options');
+      const btn = document.querySelector('.show-more-btn');
+      
+      options.forEach(opt => {
+        opt.style.display = opt.style.display === 'block' ? 'none' : 'block';
+      });
+      
+      btn.textContent = btn.textContent.includes('Show') ? 
+        'Show Less Tools ▲' : 'Show More Tools ▼';
+    }
+  </script>
+</body>
+</html>
